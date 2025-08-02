@@ -1,0 +1,7 @@
+F:\BaiduNetdiskDownload\window_tools_v2.0\window_tools\publish-portable\window_tools.pdb
+F:\BaiduNetdiskDownload\window_tools_v2.0\window_tools\publish-portable\D3DCompiler_47_cor3.dll
+F:\BaiduNetdiskDownload\window_tools_v2.0\window_tools\publish-portable\PenImc_cor3.dll
+F:\BaiduNetdiskDownload\window_tools_v2.0\window_tools\publish-portable\PresentationNative_cor3.dll
+F:\BaiduNetdiskDownload\window_tools_v2.0\window_tools\publish-portable\vcruntime140_cor3.dll
+F:\BaiduNetdiskDownload\window_tools_v2.0\window_tools\publish-portable\wpfgfx_cor3.dll
+F:\BaiduNetdiskDownload\window_tools_v2.0\window_tools\publish-portable\window_tools.exe

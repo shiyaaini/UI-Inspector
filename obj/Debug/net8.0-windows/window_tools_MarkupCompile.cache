@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\project\window_tools\obj\Debug\net8.0-windows\
+F:\BaiduNetdiskDownload\window_tools_v2.0\window_tools\obj\Debug\net8.0-windows\
 window_tools
 none
 false
-TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-D:\project\window_tools\App.xaml
+TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
+F:\BaiduNetdiskDownload\window_tools_v2.0\window_tools\App.xaml
 3-483832522
 
 71885271634
-199-347889332
+199408372339
 FindControlDialog.xaml;FindWindowDialog.xaml;MainWindow.xaml;
 
-False
+True
 
