@@ -1,0 +1,153 @@
+﻿<Window x:Class="window_tools.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:window_tools"
+        mc:Ignorable="d"
+        Title="UI Inspector (类似inspect.exe)" Height="800" Width="1200" WindowState="Maximized">
+    
+    <Window.Resources>
+        <Style x:Key="TreeViewItemStyle" TargetType="TreeViewItem">
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        
+        <Style x:Key="PropertyGridStyle" TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="RowHeaderWidth" Value="0"/>
+        </Style>
+    </Window.Resources>
+    
+    <DockPanel>
+        <!-- 工具栏 -->
+        <ToolBarTray DockPanel.Dock="Top" Background="LightGray">
+            <ToolBar>
+                <Button x:Name="btnRefresh" Content="刷新" Click="BtnRefresh_Click" Margin="2"/>
+                <Separator/>
+                <Button x:Name="btnHighlight" Content="高亮显示" Click="BtnHighlight_Click" Margin="2"/>
+                <Button x:Name="btnCapture" Content="截图" Click="BtnCapture_Click" Margin="2"/>
+                <Separator/>
+                <Button x:Name="btnFocus" Content="设置焦点" Click="BtnFocus_Click" Margin="2"/>
+                <Button x:Name="btnContextMenu" Content="上下文菜单" Click="BtnContextMenu_Click" Margin="2"/>
+                <Separator/>
+                <Button x:Name="btnSetValue" Content="设置值" Click="BtnSetValue_Click" Margin="2"/>
+                <Button x:Name="btnInvoke" Content="调用" Click="BtnInvoke_Click" Margin="2"/>
+                <Separator/>
+                <Button x:Name="btnFindWindow" Content="查找窗口" Click="BtnFindWindow_Click" Margin="2"/>
+                <Button x:Name="btnFindControl" Content="查找控件" Click="BtnFindControl_Click" Margin="2"/>
+                <Separator/>
+                <Button x:Name="btnPickElement" Content="点击获取句柄" Click="BtnPickElement_Click" Margin="2" Background="LightYellow"/>
+            </ToolBar>
+        </ToolBarTray>
+        
+        <!-- 状态栏 -->
+        <StatusBar DockPanel.Dock="Bottom" Background="LightGray">
+            <StatusBarItem>
+                <TextBlock x:Name="txtStatus" Text="就绪"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock x:Name="txtElementCount" Text="控件数量: 0"/>
+            </StatusBarItem>
+        </StatusBar>
+        
+        <!-- 主内容区域 -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" MinWidth="300"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="3*" MinWidth="400"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- 左侧：控件树视图 -->
+            <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="2">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Text="控件层次结构" FontWeight="Bold" 
+                               Background="LightBlue" Padding="5"/>
+                    <TreeView x:Name="treeViewControls" 
+                              SelectedItemChanged="TreeViewControls_SelectedItemChanged">
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="TreeViewItem" BasedOn="{StaticResource TreeViewItemStyle}"/>
+                        </TreeView.ItemContainerStyle>
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding DisplayName}" FontWeight="Normal"/>
+                                    <TextBlock Text=" - " Foreground="Gray"/>
+                                    <TextBlock Text="{Binding ControlType}" Foreground="Blue" FontSize="10"/>
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </DockPanel>
+            </Border>
+            
+            <!-- 分隔线 -->
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Background="Gray"/>
+            
+            <!-- 右侧：属性面板 -->
+            <Border Grid.Column="2" BorderBrush="Gray" BorderThickness="1" Margin="2">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Text="控件属性" FontWeight="Bold" 
+                               Background="LightGreen" Padding="5"/>
+                    
+                    <TabControl>
+                        <TabItem Header="基本属性">
+                            <DataGrid x:Name="dataGridProperties" 
+                                      Style="{StaticResource PropertyGridStyle}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="属性名" Binding="{Binding Name}" Width="200"/>
+                                    <DataGridTextColumn Header="值" Binding="{Binding Value}" Width="*"/>
+                                </DataGrid.Columns>
+                                <DataGrid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="复制选中属性" Click="CopySelectedProperty_Click"/>
+                                        <MenuItem Header="复制选中属性值" Click="CopySelectedPropertyValue_Click"/>
+                                        <MenuItem Header="复制所有属性" Click="CopyAllProperties_Click"/>
+                                        <MenuItem Header="复制所有属性值" Click="CopyAllPropertyValues_Click"/>
+                                        <Separator/>
+                                        <MenuItem Header="导出为JSON" Click="ExportPropertiesAsJson_Click"/>
+                                        <MenuItem Header="导出为TXT" Click="ExportPropertiesAsTxt_Click"/>
+                                    </ContextMenu>
+                                </DataGrid.ContextMenu>
+                            </DataGrid>
+                        </TabItem>
+                        
+                        <TabItem Header="模式支持">
+                            <DataGrid x:Name="dataGridPatterns" 
+                                      Style="{StaticResource PropertyGridStyle}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="模式" Binding="{Binding Name}" Width="200"/>
+                                    <DataGridCheckBoxColumn Header="支持" Binding="{Binding IsSupported}" Width="100"/>
+                                </DataGrid.Columns>
+                                <DataGrid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="复制选中模式" Click="CopySelectedPattern_Click"/>
+                                        <MenuItem Header="复制选中模式状态" Click="CopySelectedPatternStatus_Click"/>
+                                        <MenuItem Header="复制所有模式" Click="CopyAllPatterns_Click"/>
+                                        <MenuItem Header="复制所有模式状态" Click="CopyAllPatternStatus_Click"/>
+                                        <Separator/>
+                                        <MenuItem Header="导出为JSON" Click="ExportPatternsAsJson_Click"/>
+                                        <MenuItem Header="导出为TXT" Click="ExportPatternsAsTxt_Click"/>
+                                    </ContextMenu>
+                                </DataGrid.ContextMenu>
+                            </DataGrid>
+                        </TabItem>
+                        
+                        <TabItem Header="详细信息">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <TextBlock x:Name="txtDetails" TextWrapping="Wrap" Padding="10"/>
+                            </ScrollViewer>
+                        </TabItem>
+                    </TabControl>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </DockPanel>
+</Window>

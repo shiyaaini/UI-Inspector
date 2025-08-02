@@ -1,0 +1,60 @@
+<Window x:Class="window_tools.FindWindowDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="查找窗口" Height="300" Width="500" 
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- 标题 -->
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="3" Text="查找窗口" 
+                   FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <!-- 窗口标题 -->
+        <Label Grid.Row="1" Grid.Column="0" Content="窗口标题:" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtWindowTitle" Margin="5"/>
+
+        <!-- 类名 -->
+        <Label Grid.Row="2" Grid.Column="0" Content="类名:" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtClassName" Margin="5"/>
+
+        <!-- 进程ID -->
+        <Label Grid.Row="3" Grid.Column="0" Content="进程ID:" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtProcessId" Margin="5"/>
+
+        <!-- 查找选项 -->
+        <Label Grid.Row="4" Grid.Column="0" Content="查找选项:" VerticalAlignment="Top" Margin="0,10,0,0"/>
+        <StackPanel Grid.Row="4" Grid.Column="1" Margin="5,10,0,0">
+            <CheckBox x:Name="chkMatchTitle" Content="匹配窗口标题" IsChecked="True"/>
+            <CheckBox x:Name="chkMatchClassName" Content="匹配类名" IsChecked="False"/>
+            <CheckBox x:Name="chkMatchProcessId" Content="匹配进程ID" IsChecked="False"/>
+        </StackPanel>
+
+        <!-- 结果列表 -->
+        <Label Grid.Row="5" Grid.Column="0" Content="查找结果:" VerticalAlignment="Top"/>
+        <ListBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" x:Name="listResults" 
+                 Margin="5" SelectionChanged="ListResults_SelectionChanged"/>
+
+        <!-- 按钮 -->
+        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" 
+                    Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button x:Name="btnFind" Content="查找" Width="80" Click="BtnFind_Click" Margin="5"/>
+            <Button x:Name="btnSelect" Content="选择" Width="80" Click="BtnSelect_Click" 
+                    IsEnabled="False" Margin="5"/>
+            <Button x:Name="btnCancel" Content="取消" Width="80" Click="BtnCancel_Click" Margin="5"/>
+        </StackPanel>
+    </Grid>
+</Window> 
